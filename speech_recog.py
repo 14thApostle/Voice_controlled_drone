@@ -18,18 +18,18 @@ def return_speech():
     print(data)
     return data
 
+rospy.init_node('talker', anonymous=True)
+pub = rospy.Publisher('/voice', String,queue_size=10)
+
 #while True:
 def talker():
-    pub = rospy.Publisher('voice_cammands', String, queue_size=10)
-    rospy.init_node('talker', anonymous=True)
-    rate = rospy.Rate(10)
-    while not rospy.is_shutdown():
+    text = return_speech()
+    print("You said {}\n\n".format(text))
+    pub.publish(text)
 
-        print("You said {}\n\n".format(return_speech()))
-        pub.publish(return_speech())
-        rate.sleep()
-if __name__ == '__main__':
+while True:
     try:
         talker()
-    except:
+    except Exception:
+        print(Exception)
         pass
