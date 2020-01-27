@@ -44,16 +44,7 @@ def assign(data):
         pos_pub.pose.position.x = int(data[1],10)
         pos_pub.pose.position.y = int(data[2],10)
         pos_pub.pose.position.z = int(data[3],10)
-        pos_pub.pose.orientation.x = 0.0
-        pos_pub.pose.orientation.y = 0.0
-        pos_pub.pose.orientation.z = 0.0
-        pos_pub.pose.orientation.w = 1.0
-        setpoint_client.publish(pos_pub)
 
-
-    
-# if __name__ == '__main__':
-    # listener()
 rospy.spin()
 
 
