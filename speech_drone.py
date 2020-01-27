@@ -37,14 +37,17 @@ def assign(data):
     if(data[0]=='direction'):
 
         # Mavros local position publisher
-        setpoint_client = rospy.Publisher('mavros/setpoint_position/local',PoseStamped, queue_size=10)
+        setpoint_client = rospy.Publisher('mavros/setpoint_position/local',PoseStamped, queue_size=1)
+        d = data[1].split(".")
 
-        ## Fill msg with values
-        pos_pub = PoseStamped()
-        pos_pub.pose.position.x = int(data[1],10)
-        pos_pub.pose.position.y = int(data[2],10)
-        pos_pub.pose.position.z = int(data[3],10)
-
+        pos_pub.pose.position.x = float(d[0])
+        pos_pub.pose.position.y = float(d[1])
+        pos_pub.pose.position.z = float(d[2])
+        pos_pub.pose.orientation.x = 0.0
+        pos_pub.pose.orientation.y = 0.0
+        pos_pub.pose.orientation.z = 0.0
+        pos_pub.pose.orientation.w = 1.0
+        setpoint_client.publish(pos_pub)
 rospy.spin()
 
 
