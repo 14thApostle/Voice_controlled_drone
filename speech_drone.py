@@ -6,10 +6,17 @@ from mavros_msgs.srv import CommandTOL
 from mavros_msgs.srv import SetMode
 
 from geometry_msgs.msg import PoseStamped
-from std_msgs.msg import String
+from std_msgs.msg import String, Float64
 from geometry_msgs.msg import TwistStamped
 
 rospy.init_node('todrone', anonymous=True)
+compass_hdg = 0
+def compass_get(data):
+    global compass_hdg
+    # print(data)
+    compass_hdg = data.data
+
+rospy.Subscriber("/mavros/global_position/compass_hdg", Float64, compass_get)
 
 def callback(data1):
     rospy.loginfo(rospy.get_caller_id() + "I heard %s", data1.data)
@@ -58,7 +65,7 @@ def assign(data):
             pos_pub.pose.position.z = float(d[2])
         except:
             pass
-        
+
         setpoint_client.publish(pos_pub)
 
     if(data[0]=='velocity'):
@@ -73,8 +80,21 @@ def assign(data):
         velocity_msg.twist.linear.z = float(d[2])
         setvel_client.publish(velocity_msg)
 
+    if(data[0]=='spin'):
+        # Mavros velocity publisher
+        setvel_client = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel',TwistStamped, queue_size=1)
+        velocity_msg = TwistStamped()
+        velocity_msg.twist.angular.z = float(4)
+        setvel_client.publish(velocity_msg)
+
+        setyaw_client = rospy.Publisher('/mavros/global_position/compass_hdg',Float64, queue_size=1)
+        yaw_msg = Float64()
+        yaw_msg.data = compass_hdg
+        setyaw_client.publish(yaw_msg)
 
 
+
+print(compass_hdg)
 rospy.spin()
 
 
