@@ -80,6 +80,49 @@ def assign(data):
         velocity_msg.twist.linear.z = float(d[2])
         setvel_client.publish(velocity_msg)
 
+    if(data[0]=='come'):
+        # Mavros velocity publisher
+        setvel_client = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel',TwistStamped, queue_size=1)
+        velocity_msg = TwistStamped()
+        velocity_msg.twist.linear.x = 4
+        setvel_client.publish(velocity_msg)
+
+    if(data[0]=='go'):
+        # Mavros velocity publisher
+        setvel_client = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel',TwistStamped, queue_size=1)
+        velocity_msg = TwistStamped()
+        velocity_msg.twist.linear.x = -4
+        setvel_client.publish(velocity_msg)
+
+    if(data[0]=='right'):
+        # Mavros velocity publisher
+        setvel_client = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel',TwistStamped, queue_size=1)
+        velocity_msg = TwistStamped()
+        velocity_msg.twist.linear.y = 4
+        setvel_client.publish(velocity_msg)
+
+    if(data[0]=='left'):
+        # Mavros velocity publisher
+        setvel_client = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel',TwistStamped, queue_size=1)
+        velocity_msg = TwistStamped()
+        velocity_msg.twist.linear.y = -4
+        setvel_client.publish(velocity_msg)
+
+    if(data[0]=='ascend'):
+        # Mavros velocity publisher
+        setvel_client = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel',TwistStamped, queue_size=1)
+        velocity_msg = TwistStamped()
+        velocity_msg.twist.linear.z = 4
+        setvel_client.publish(velocity_msg)
+
+    if(data[0]=='down'):
+        # Mavros velocity publisher
+        setvel_client = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel',TwistStamped, queue_size=1)
+        velocity_msg = TwistStamped()
+        velocity_msg.twist.linear.z = -4
+        setvel_client.publish(velocity_msg)
+
+
     if(data[0]=='spin'):
         # Mavros velocity publisher
         setvel_client = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel',TwistStamped, queue_size=1)
