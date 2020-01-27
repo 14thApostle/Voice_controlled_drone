@@ -29,6 +29,7 @@ def assign(data):
 
         mod = SetMode()
         mod.custom_mode = str(52)
+<<<<<<< HEAD
 
         mode_change_client = rospy.ServiceProxy('mavros/set_mode',SetMode)
         arming_client = rospy.ServiceProxy('mavros/cmd/arming',CommandBool)
@@ -39,6 +40,26 @@ def assign(data):
         arming_client(True)
         points = float(data[2])
         takeoff_client(altitude = points, latitude = 0, longitude = 0, min_pitch = 0, yaw = 0)
+=======
+        # mode_change_client = rospy.Service('mavros/set_mode',SetMode)
+
+        # Mode Change
+        mode_change_client = rospy.ServiceProxy('mavros/set_mode',SetMode)
+
+        # Arming 
+        arming_cl = rospy.ServiceProxy("/mavros/cmd/arming", CommandBool)
+        arming_cl.call(True)
+
+        # Takeoff 
+        takeoff_client = rospy.ServiceProxy('mavros/cmd/takeoff',CommandTOL)
+        takeoff_client.call(altitude=int(data[2]))
+
+        # mode_change_client(0,52)
+        # arm_cmd.request.value = True
+        # arming_client.call(arm_cmd)
+        # points.request.altitude = int(data[2],10)
+        # takeoff_client.publish(points)
+>>>>>>> a10d0bc379977cd5f3991028ef62737ce0efbf26
 
     if(data[0]=='direction'):
         pos_pub = PoseStamped()
