@@ -17,11 +17,13 @@ def callback(data1):
     print(data)
     assign(data)
 rospy.Subscriber("/voice", String, callback)
-current_height = 0
+
+current_pos = PoseStamped()
+
 def current_pos_callback(position):
 
-    global current_height
-    current_height=position.pose.position.z
+    global current_pos
+    current_pos = position
 
 rospy.Subscriber('mavros/local_position/pose',PoseStamped,current_pos_callback)
 
@@ -49,21 +51,14 @@ def assign(data):
 
         d = data[1].split(".")
         print(d[0])
-        print(current_height)
-        pos_pub = PoseStamped()
-
-        pos_pub.pose.position.x = float(d[0])
-        pos_pub.pose.position.y = float(d[1])
-        if d[2]=='':
-            pos_pub.pose.position.z = current_height
-        else:
+        pos_pub = current_pos
+        try:
+            pos_pub.pose.position.x = float(d[0])
+            pos_pub.pose.position.y = float(d[1])
             pos_pub.pose.position.z = float(d[2])
-
-        pos_pub.pose.position.z = float(d[2])
-        pos_pub.pose.orientation.x = 0.0
-        pos_pub.pose.orientation.y = 0.0
-        pos_pub.pose.orientation.z = 0.0
-        pos_pub.pose.orientation.w = 1.0
+        except:
+            pass
+        
         setpoint_client.publish(pos_pub)
 
     if(data[0]=='velocity'):
