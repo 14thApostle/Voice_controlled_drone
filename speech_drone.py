@@ -7,6 +7,7 @@ from mavros_msgs.srv import SetMode
 
 from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import String
+from geometry_msgs.msg import TwistStamped
 
 rospy.init_node('todrone', anonymous=True)
 
@@ -49,6 +50,7 @@ def assign(data):
         d = data[1].split(".")
         print(d[0])
         print(current_height)
+        pos_pub = PoseStamped()
 
         pos_pub.pose.position.x = float(d[0])
         pos_pub.pose.position.y = float(d[1])
@@ -63,6 +65,21 @@ def assign(data):
         pos_pub.pose.orientation.z = 0.0
         pos_pub.pose.orientation.w = 1.0
         setpoint_client.publish(pos_pub)
+
+    if(data[0]=='velocity'):
+        # Mavros velocity publisher
+        setvel_client = rospy.Publisher('/mavros/setpoint_velocity/cmd_vel',TwistStamped, queue_size=1)
+        d = data[1].split(".")
+        velocity_msg = TwistStamped()
+        d.extend(['0','0','0'])
+        print(d)
+        velocity_msg.twist.linear.x = float(d[0])
+        velocity_msg.twist.linear.y = float(d[1])
+        velocity_msg.twist.linear.z = float(d[2])
+        setvel_client.publish(velocity_msg)
+
+
+
 rospy.spin()
 
 
